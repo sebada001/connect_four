@@ -33,6 +33,51 @@ class Game
   def switch_turns
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
+
+  def check_winner
+    return vertical_check if vertical_check[0]
+
+    horizontal_check
+  end
+
+  private
+
+  def horizontal_check
+    counter = 1
+    player = nil
+    @board.each_with_index do |row, _row_ind|
+      row.each_with_index do |_col, col_ind|
+        break if counter >= 4
+
+        if !row[col_ind + 1].nil? && (row[col_ind] == row[col_ind + 1]) && row[col_ind] != '  '
+          counter += 1
+          player = row[col_ind]
+        else
+          counter = 1
+        end
+      end
+    end
+    counter >= 4 ? [true, player] : [false]
+  end
+
+  def vertical_check
+    counter = 1
+    player = nil
+    0..5.times do |i|
+      @board.each_with_index do |row, r_ind|
+        break if counter >= 4
+
+        if !@board[r_ind + 1].nil? && (row[i] == @board[r_ind + 1][i]) && row[i] != '  '
+          counter += 1
+          player = row[i]
+        else
+          counter = 1
+        end
+      end
+    end
+
+    counter >= 4 ? [true, player] : [false]
+  end
 end
 
 gamer = Game.new

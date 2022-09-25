@@ -91,4 +91,36 @@ describe Game do
       expect(game_test.current_player[:name]).to eq('anon')
     end
   end
+
+  describe '#check_winner' do
+    subject(:game_test) { described_class.new }
+    my_player = { symb: "\u{1F602}", name: 'winner' }
+
+    it "doesn't win if just two placements" do
+      game_test.make_move(0, my_player)
+      game_test.make_move(1, my_player)
+      expect(game_test.check_winner[0]).to eq(false)
+    end
+
+    it 'wins with 4 horizontal placements' do
+      game_test.make_move(0, my_player)
+      game_test.make_move(1, my_player)
+      game_test.make_move(2, my_player)
+      game_test.make_move(3, my_player)
+      expect(game_test.check_winner[0]).to eq(true)
+    end
+
+    it 'returns the winners emoji' do
+      game_test.make_move(0, my_player)
+      game_test.make_move(1, my_player)
+      game_test.make_move(2, my_player)
+      game_test.make_move(3, my_player)
+      expect(game_test.check_winner[1]).to eq("\u{1F602}")
+    end
+
+    it 'wins with 4 vertical placements' do
+      4.times { game_test.make_move(0, my_player) }
+      expect(game_test.check_winner[0]).to eq(true)
+    end
+  end
 end
