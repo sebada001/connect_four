@@ -84,5 +84,11 @@ describe Game do
       game_test.switch_turns
       expect(game_test.current_player[:name]).to eq('benon')
     end
+
+    it 'switches back to player1' do
+      game_test.switch_turns
+      game_test.switch_turns
+      expect(game_test.current_player[:name]).to eq('anon')
+    end
   end
 end
