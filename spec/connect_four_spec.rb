@@ -1,38 +1,39 @@
 # frozen_string_literal: true
-require './lib/connect_four.rb'
+
+require './lib/connect_four'
 
 describe Game do
   describe '#initialize' do
     context 'when no names are given' do
-      subject(:game_test) { described_class.new() }
+      subject(:game_test) { described_class.new }
 
-      it 'player_1 is John' do
-        expect(game_test.player_1[:name]).to eq('John')
+      it 'player1 is John' do
+        expect(game_test.player1[:name]).to eq('John')
       end
-      it 'player_2 is Mon' do
-        expect(game_test.player_2[:name]).to eq('Mon')
+      it 'player2 is Mon' do
+        expect(game_test.player2[:name]).to eq('Mon')
       end
     end
 
     context 'when names are given' do
       subject(:game_test) { described_class.new('Pepe', 'Pepa') }
 
-      it 'player_1 name matches the input' do
-        expect(game_test.player_1[:name]).to eq('Pepe')
+      it 'player1 name matches the input' do
+        expect(game_test.player1[:name]).to eq('Pepe')
       end
-      it 'player_2 name matches the input' do
-        expect(game_test.player_2[:name]).to eq('Pepa')
+      it 'player2 name matches the input' do
+        expect(game_test.player2[:name]).to eq('Pepa')
       end
     end
 
     context 'players have emoji symbols' do
-      subject(:game_test) { described_class.new() }
+      subject(:game_test) { described_class.new }
 
-      it 'player_1 is a laughing emoji' do
-        expect(game_test.player_1[:symb]).to eql("\u{1F602}")
+      it 'player1 is a laughing emoji' do
+        expect(game_test.player1[:symb]).to eql("\u{1F602}")
       end
-      it 'player_2 is a muted emoji' do
-        expect(game_test.player_2[:symb]).to eq("\u{1F636}")
+      it 'player2 is a muted emoji' do
+        expect(game_test.player2[:symb]).to eq("\u{1F636}")
       end
     end
 
@@ -48,32 +49,40 @@ describe Game do
         expect(game_test.board[rand(numbers)].length).to eq(7)
       end
     end
-
-
   end
 
-  describe '#make_move' do 
+  describe '#make_move' do
     subject(:game_test) { described_class.new }
 
     it 'places an emoji in the correct spot' do
-      dummy_player = { :name => 'cleo', :symb => ':)' }
+      dummy_player = { name: 'cleo', symb: ':)' }
       game_test.make_move(0, dummy_player)
       expect(game_test.board[-1][0]).to eql(':)')
     end
 
     it 'places one emoji on top of the other' do
-      dummy_player_2 = { :name => 'nefer', :symb => ':[' }
-      2.times { game_test.make_move(0, dummy_player_2) }
+      dummy_player2 = { name: 'nefer', symb: ':[' }
+      2.times { game_test.make_move(0, dummy_player2) }
       expect(game_test.board[-2][0]).to eql(':[')
     end
 
     it 'returns false if overflow' do
-      dummy_player_2 = { :name => 'nefer', :symb => ':[' }
-      6.times { game_test.make_move(0, dummy_player_2) }
-      game_test.display_board
-      expect(game_test.make_move(0, dummy_player_2)).to eql(false)
+      dummy_player2 = { name: 'nefer', symb: ':[' }
+      6.times { game_test.make_move(0, dummy_player2) }
+      expect(game_test.make_move(0, dummy_player2)).to eql(false)
     end
-    
   end
 
+  describe '#switch_turns' do
+    subject(:game_test) { described_class.new('anon', 'benon') }
+
+    it 'starts with player1' do
+      expect(game_test.current_player[:name]).to eq('anon')
+    end
+
+    it 'switches turn' do
+      game_test.switch_turns
+      expect(game_test.current_player[:name]).to eq('benon')
+    end
+  end
 end
