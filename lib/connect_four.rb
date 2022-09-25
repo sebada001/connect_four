@@ -37,7 +37,9 @@ class Game
   def check_winner
     return vertical_check if vertical_check[0]
 
-    horizontal_check
+    return horizontal_check if horizontal_check[0]
+
+    diagonal_check
   end
 
   private
@@ -77,6 +79,36 @@ class Game
     end
 
     counter >= 4 ? [true, player] : [false]
+  end
+
+  def diagonal_check
+    counter = 1
+    player = nil
+    0..5.times do |col|
+      break unless counter < 4
+
+      0..6.times do |row|
+        self_checker = lambda do |row_inner, col_inner, counter_inner = 1|
+          counter = counter_inner
+          return if counter_inner >= 4
+
+          return unless move_valid(row_inner + 1, col_inner - 1)
+
+          if (@board[row_inner][col_inner] == @board[row_inner + 1][col_inner - 1]) && @board[row_inner][col_inner] != '  '
+            counter_inner += 1
+            player = @board[row_inner][col_inner]
+            self_checker.call(row_inner + 1, col_inner - 1, counter_inner)
+          end
+        end
+        self_checker.call(row, col)
+        break if counter >= 4
+      end
+    end
+    counter >= 4 ? [true, player] : [false]
+  end
+
+  def move_valid(row, col)
+    !@board[row].nil? && !@board[row][col].nil?
   end
 end
 

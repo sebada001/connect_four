@@ -95,6 +95,7 @@ describe Game do
   describe '#check_winner' do
     subject(:game_test) { described_class.new }
     my_player = { symb: "\u{1F602}", name: 'winner' }
+    my_enemy = { symb: "\u{1F636}", name: 'loser' }
 
     it "doesn't win if just two placements" do
       game_test.make_move(0, my_player)
@@ -120,6 +121,21 @@ describe Game do
 
     it 'wins with 4 vertical placements' do
       4.times { game_test.make_move(0, my_player) }
+      expect(game_test.check_winner[0]).to eq(true)
+    end
+
+    it 'wins diagonally' do
+      game_test.make_move(0, my_player)
+      game_test.make_move(1, my_enemy)
+      game_test.make_move(1, my_player)
+      game_test.make_move(2, my_player)
+      game_test.make_move(2, my_enemy)
+      game_test.make_move(2, my_player)
+      game_test.make_move(3, my_player)
+      game_test.make_move(3, my_enemy)
+      game_test.make_move(3, my_player)
+      game_test.make_move(3, my_player)
+      game_test.display_board
       expect(game_test.check_winner[0]).to eq(true)
     end
   end
