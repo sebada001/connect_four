@@ -124,7 +124,7 @@ describe Game do
       expect(game_test.check_winner[0]).to eq(true)
     end
 
-    it 'wins diagonally going up' do
+    it 'wins diagonally going up 1' do
       game_test.make_move(0, my_player)
       game_test.make_move(1, my_enemy)
       game_test.make_move(1, my_player)
@@ -135,7 +135,20 @@ describe Game do
       game_test.make_move(3, my_enemy)
       game_test.make_move(3, my_player)
       game_test.make_move(3, my_player)
-      game_test.display_board
+      expect(game_test.check_winner[0]).to eq(true)
+    end
+
+    it 'wins diagonally going up 2' do
+      game_test.make_move(3, my_player)
+      game_test.make_move(4, my_enemy)
+      game_test.make_move(4, my_player)
+      game_test.make_move(5, my_player)
+      game_test.make_move(5, my_enemy)
+      game_test.make_move(5, my_player)
+      game_test.make_move(6, my_player)
+      game_test.make_move(6, my_enemy)
+      game_test.make_move(6, my_player)
+      game_test.make_move(6, my_player)
       expect(game_test.check_winner[0]).to eq(true)
     end
 
@@ -150,7 +163,6 @@ describe Game do
       game_test.make_move(0, my_enemy)
       game_test.make_move(0, my_player)
       game_test.make_move(0, my_player)
-      game_test.display_board
       expect(game_test.check_winner[0]).to eq(true)
     end
   end

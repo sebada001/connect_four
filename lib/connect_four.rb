@@ -42,6 +42,10 @@ class Game
     diagonal_check
   end
 
+  def game_over?
+    !(check_winner[0] == false && @board.any? { |row| row.include?('  ') })
+  end
+
   private
 
   def horizontal_check
@@ -84,10 +88,10 @@ class Game
   def diagonal_check
     counter = 1
     player = nil
-    0..5.times do |col|
+    6.times do |row|
       break unless counter < 4
 
-      0..6.times do |row|
+      7.times do |col|
         checker_neg = lambda do |row_inner, col_inner, counter_inner = 1|
           counter = counter_inner
           return if counter_inner >= 4
@@ -126,7 +130,3 @@ class Game
     !@board[row].nil? && !@board[row][col].nil?
   end
 end
-
-gamer = Game.new
-gamer.make_move(0, gamer.player1)
-gamer.display_board
