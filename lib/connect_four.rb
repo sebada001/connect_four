@@ -88,7 +88,7 @@ class Game
       break unless counter < 4
 
       0..6.times do |row|
-        self_checker = lambda do |row_inner, col_inner, counter_inner = 1|
+        checker_neg = lambda do |row_inner, col_inner, counter_inner = 1|
           counter = counter_inner
           return if counter_inner >= 4
 
@@ -97,10 +97,25 @@ class Game
           if (@board[row_inner][col_inner] == @board[row_inner + 1][col_inner - 1]) && @board[row_inner][col_inner] != '  '
             counter_inner += 1
             player = @board[row_inner][col_inner]
-            self_checker.call(row_inner + 1, col_inner - 1, counter_inner)
+            checker_neg.call(row_inner + 1, col_inner - 1, counter_inner)
           end
         end
-        self_checker.call(row, col)
+        checker_pos = lambda do |row_inner, col_inner, counter_inner = 1|
+          counter = counter_inner
+          return if counter_inner >= 4
+
+          return unless move_valid(row_inner + 1, col_inner + 1)
+
+          if (@board[row_inner][col_inner] == @board[row_inner + 1][col_inner + 1]) && @board[row_inner][col_inner] != '  '
+            counter_inner += 1
+            player = @board[row_inner][col_inner]
+            checker_pos.call(row_inner + 1, col_inner + 1, counter_inner)
+          end
+        end
+        checker_neg.call(row, col)
+        break if counter >= 4
+
+        checker_pos.call(row, col)
         break if counter >= 4
       end
     end
